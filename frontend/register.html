@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register – NexGen Audio & Tech</title>
+    <meta name="description" content="Create a new NexGen account.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body class="auth-body">
+    <div id="auth-toast" class="toast hidden"><span id="auth-toast-msg"></span></div>
+
+    <div class="auth-container">
+        <a href="index.html" class="auth-logo">NEXGEN</a>
+        <h1 class="auth-title">Create Account</h1>
+        <p class="auth-subtitle">Join NexGen today and explore premium tech.</p>
+
+        <form id="register-form" class="auth-form">
+            <div class="form-group">
+                <label for="reg-username">Username</label>
+                <div class="input-wrapper">
+                    <i data-lucide="user"></i>
+                    <input type="text" id="reg-username" placeholder="Choose a username" required autocomplete="username">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="reg-email">Email Address</label>
+                <div class="input-wrapper">
+                    <i data-lucide="mail"></i>
+                    <input type="email" id="reg-email" placeholder="you@example.com" required autocomplete="email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="reg-password">Password</label>
+                <div class="input-wrapper">
+                    <i data-lucide="lock"></i>
+                    <input type="password" id="reg-password" placeholder="At least 8 characters" required autocomplete="new-password" minlength="8">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" id="register-btn">
+                <span>Create Account</span>
+                <i data-lucide="arrow-right"></i>
+            </button>
+        </form>
+
+        <p class="auth-switch">
+            Already have an account? <a href="login.html">Sign in</a>
+        </p>
+        <a href="index.html" class="back-home">
+            <i data-lucide="arrow-left"></i> Back to Home
+        </a>
+    </div>
+
+    <div class="auth-glow"></div>
+
+    <script>
+        lucide.createIcons();
+        const API_BASE = 'http://localhost:3005/api';
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('auth-toast');
+            const msgEl = document.getElementById('auth-toast-msg');
+            msgEl.textContent = msg;
+            toast.style.backgroundColor = isError ? 'var(--danger)' : 'var(--success)';
+            toast.classList.remove('hidden');
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.classList.add('hidden'), 400); }, 3000);
+        }
+
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('register-btn');
+            btn.disabled = true;
+            btn.querySelector('span').textContent = 'Creating account...';
+
+            const username = document.getElementById('reg-username').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+
+            try {
+                const res = await fetch(`${API_BASE}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Registration failed');
+
+                showToast('Account created! Redirecting to login...');
+                setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+            } catch (err) {
+                showToast(err.message, true);
+                btn.disabled = false;
+                btn.querySelector('span').textContent = 'Create Account';
+            }
+        });
+    </script>
+</body>
+</html>

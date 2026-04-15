@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login – NexGen Audio & Tech</title>
+    <meta name="description" content="Log in to your NexGen account.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="auth.css">
+</head>
+<body class="auth-body">
+    <div id="auth-toast" class="toast hidden"><span id="auth-toast-msg"></span></div>
+
+    <div class="auth-container">
+        <a href="index.html" class="auth-logo">NEXGEN</a>
+        <h1 class="auth-title">Welcome Back</h1>
+        <p class="auth-subtitle">Sign in to your account to continue shopping.</p>
+
+        <form id="login-form" class="auth-form">
+            <div class="form-group">
+                <label for="login-email">Email Address</label>
+                <div class="input-wrapper">
+                    <i data-lucide="mail"></i>
+                    <input type="email" id="login-email" placeholder="you@example.com" required autocomplete="email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <div class="input-wrapper">
+                    <i data-lucide="lock"></i>
+                    <input type="password" id="login-password" placeholder="Your password" required autocomplete="current-password">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" id="login-btn">
+                <span>Sign In</span>
+                <i data-lucide="arrow-right"></i>
+            </button>
+        </form>
+
+        <p class="auth-switch">
+            Don't have an account? <a href="register.html">Create one</a>
+        </p>
+        <a href="index.html" class="back-home">
+            <i data-lucide="arrow-left"></i> Back to Home
+        </a>
+    </div>
+
+    <div class="auth-glow"></div>
+
+    <script>
+        lucide.createIcons();
+        const API_BASE = 'http://localhost:3005/api';
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('auth-toast');
+            const msgEl = document.getElementById('auth-toast-msg');
+            msgEl.textContent = msg;
+            toast.style.backgroundColor = isError ? 'var(--danger)' : 'var(--success)';
+            toast.classList.remove('hidden');
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.classList.add('hidden'), 400); }, 3000);
+        }
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('login-btn');
+            btn.disabled = true;
+            btn.querySelector('span').textContent = 'Signing in...';
+
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const res = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Login failed');
+
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                showToast(`Welcome back, ${data.user.username}!`);
+                setTimeout(() => { window.location.href = 'index.html'; }, 1200);
+            } catch (err) {
+                showToast(err.message, true);
+                btn.disabled = false;
+                btn.querySelector('span').textContent = 'Sign In';
+            }
+        });
+    </script>
+</body>
+</html>

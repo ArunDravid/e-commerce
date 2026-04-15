@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexGen Audio & Tech</title>
+    <meta name="description" content="Premium tech products and accessories.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden">
+        <span id="toast-message">Item added to cart!</span>
+    </div>
+
+    <!-- Category Sidebar Overlay -->
+    <div id="sidebar-overlay" class="cart-overlay"></div>
+
+    <!-- Category Sidebar Drawer -->
+    <aside id="category-sidebar" class="cart-sidebar category-sidebar-left">
+        <div class="cart-header">
+            <h3>Categories</h3>
+            <button id="close-sidebar-btn" class="close-btn" aria-label="Close Categories">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <div class="category-sidebar-body">
+            <button class="category-btn active" data-category="">
+                <i data-lucide="layout-grid"></i> All Products
+            </button>
+            <div id="category-list"></div>
+        </div>
+    </aside>
+
+    <!-- Navigation -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <button id="menu-btn" class="icon-btn" aria-label="Open Categories">
+                    <i data-lucide="menu"></i>
+                </button>
+                <a href="#" class="logo">
+                    <span class="logo-text">NEXGEN</span>
+                </a>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar-wrapper">
+                <i data-lucide="search" class="search-icon"></i>
+                <input type="search" id="search-input" class="search-input" placeholder="Search products...">
+            </div>
+
+            <nav class="nav-links">
+                <div id="user-nav-area"></div>
+                <button id="cart-btn" class="cart-toggle-btn" aria-label="Open Cart">
+                    <i data-lucide="shopping-bag"></i>
+                    <span id="cart-badge" class="cart-badge">0</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Elevate Your <span>Experience</span></h1>
+                <p class="hero-subtitle">Discover our premium collection of audio and tech accessories designed for the modern lifestyle.</p>
+                <a href="#products" class="btn btn-primary">Shop Now</a>
+            </div>
+            <div class="hero-glow"></div>
+        </section>
+
+        <!-- Product Grid -->
+        <section id="products" class="products-section">
+            <div class="section-header">
+                <h2 id="products-heading">Featured Collection</h2>
+                <div class="header-line"></div>
+            </div>
+            <div id="product-grid" class="product-grid">
+                <div class="loading-state">
+                    <i data-lucide="loader-2" class="spinner"></i> Loading products...
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Shopping Cart Sidebar Overlay -->
+    <div id="cart-overlay" class="cart-overlay"></div>
+
+    <!-- Shopping Cart Sidebar -->
+    <aside id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button id="close-cart-btn" class="close-btn" aria-label="Close Cart">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+        <div id="cart-items" class="cart-items">
+            <div class="empty-cart-message">
+                <i data-lucide="shopping-cart" class="empty-icon"></i>
+                <p>Your cart is empty.</p>
+                <button class="btn btn-secondary close-empty-btn">Continue Shopping</button>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-summary">
+                <span>Subtotal</span>
+                <span id="cart-total">$0.00</span>
+            </div>
+            <a href="checkout.html" id="checkout-link" class="btn btn-primary btn-checkout" style="display:none;text-decoration:none;text-align:center;">
+                Checkout
+            </a>
+        </div>
+    </aside>
+
+    <footer class="footer">
+        <p>&copy; 2026 NexGen Tech. All rights reserved.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
